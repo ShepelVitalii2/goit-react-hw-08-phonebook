@@ -1,7 +1,7 @@
 import React from 'react';
 import Loader from 'react-loader-spinner';
 
-function LoaderSpinner() {
+function LoaderElement() {
   return (
     <Loader
       className="Loader App-logo"
@@ -14,4 +14,4 @@ function LoaderSpinner() {
   );
 }
 
-export default LoaderSpinner;
+export default LoaderElement;

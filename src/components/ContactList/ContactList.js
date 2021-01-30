@@ -1,37 +1,32 @@
-import { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { FaRegTimesCircle } from 'react-icons/fa';
 import s from './ContactList.module.css';
-import { contactsOperations, contactsSelectors } from '../../redux/contacts';
+import { FaRegTimesCircle } from 'react-icons/fa';
+import { deleteContacts } from '../../redux/contacts/contacts-action';
+import { filteredContacts } from '../../redux/contacts/contacts-selector';
 
 const ContactList = () => {
   const dispatch = useDispatch();
-  const filteredContacts = useSelector(contactsSelectors.filteredContacts);
-  const contacts = useSelector(contactsSelectors.getItems);
-  const error = useSelector(contactsSelectors.getError);
-
-  useEffect(() => dispatch(contactsOperations.fetchContacts()), [dispatch]);
+  const contacts = useSelector(filteredContacts);
 
   return (
     <>
-      {contacts.length > 0 && !error && (
-        <ul className={s.list}>
-          {filteredContacts.map(({ id, name, number }) => (
-            <li className={s.item} key={id}>
-              <p className={s.contact}>
-                {name} : {number}
-              </p>
-              <button
-                className={s.btn}
-                type="button"
-                onClick={() => dispatch(contactsOperations.deleteContact(id))}
-              >
-                <FaRegTimesCircle className={s.icon} />
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className={s.list}>
+        {contacts.map(({ id, name, number }) => (
+          <li className={s.item} key={id}>
+            <p className={s.contact}>
+              {name} : {number}
+            </p>
+            <button
+              className={s.btn}
+              type="button"
+              onClick={() => dispatch(deleteContacts(id))}
+            >
+              <FaRegTimesCircle className={s.icon} />
+            </button>
+          </li>
+        ))}
+      </ul>
     </>
   );
 };

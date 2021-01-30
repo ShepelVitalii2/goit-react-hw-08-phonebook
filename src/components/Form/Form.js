@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { contactsOperations, contactsSelectors } from '../../redux/contacts';
+import { addContacts } from '../../redux/contacts/contacts-action';
+import { getItems } from '../../redux/contacts/contacts-selector';
 import s from './Form.module.css';
-import Loader from '../Loader';
 
 function Form() {
   const dispatch = useDispatch();
-  const contacts = useSelector(contactsSelectors.getItems);
-  const isLoading = useSelector(contactsSelectors.getLoading);
+  const contacts = useSelector(getItems);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -32,12 +31,15 @@ function Form() {
 
   const checkName = name => {
     return contacts.find(
-      contact => contact.name.toLowerCase() === name.toLowerCase(),
+      contact =>
+        contact.name.toLowerCase() === name.toLowerCase(),
     );
   };
 
   const checkNumber = number => {
-    return contacts.find(contact => contact.number === number);
+    return contacts.find(
+      contact => contact.number === number,
+    );
   };
 
   const checkValidNumber = number => {
@@ -49,11 +51,13 @@ function Form() {
     if (checkName(name)) {
       alert(`${name} is already in your phonebook, bro!`);
     } else if (checkNumber(number)) {
-      alert(`${number} is already in your phonebook, bro!`);
+      alert(
+        `${number} is already in your phonebook, bro!`,
+      );
     } else if (checkValidNumber(number)) {
       alert(`Enter valid number please`);
     } else {
-      dispatch(contactsOperations.addContact(name, number));
+      dispatch(addContacts(name, number));
     }
     resetInput();
   };
@@ -82,12 +86,9 @@ function Form() {
           autoComplete="off"
         />
       </label>
-      {!isLoading && (
-        <button className={s.button} type="submit">
-          Add contact
-        </button>
-      )}
-      {isLoading && <Loader />}
+      <button className={s.button} type="submit">
+        Add contact
+      </button>
     </form>
   );
 }
